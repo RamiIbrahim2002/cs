@@ -3,7 +3,6 @@ from django.shortcuts import render,redirect
 from . import util
 from . import forms
 import random
-from django.core.files import File
 
 def index(request):
     return render(request, "encyclopedia/index.html", {
@@ -71,7 +70,21 @@ def randome(request):
         "markdown": util.convert_to_html(util.get_entry(random_article))
     })
 
-
-
+def edit(request,title):
+    if request.method == "POST":
+        form = forms.edit_article_form(request.POST)
+        print(form.is_valid())
+        if form.is_valid():
+            new_content = form.cleaned_data['article_content']
+            util.save_entry(title,new_content)
+            return redirect("entry", title=title)
+    else:
+        form = forms.edit_article_form({
+            'article_content': util.get_entry(title),
+        })
+    return render(request, 'encyclopedia/edit.html', {
+        'form': form,
+        'title': title
+    })
 
 

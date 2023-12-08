@@ -6,3 +6,9 @@ class new_article_form(forms.Form):
         label="Article content",
         widget=forms.Textarea()
     )
+
+class edit_article_form(forms.Form):
+    article_content = forms.CharField(
+        label="Article content",
+        widget=forms.Textarea()
+    )
